@@ -1,4 +1,5 @@
 import * as fizlib from './fizlib.js';
+import * as functions from './functions.js';
 
 function addPomiarHtml(id, nazwa) {
     const pomiar = new fizlib.Pomiar();
@@ -101,11 +102,11 @@ function pomiarZmieniony() {
     const ch = -pAvg / h.sredniaArytmetyczna()
 
     gestoscEl.textContent = pAvg
-    zlozonaNiepewnoscStandardowaEl.textContent = fizlib.zlozonaNiepewnoscStandardowa(
+    zlozonaNiepewnoscStandardowaEl.textContent = functions.zlozonaNiepewnoscStandardowa(
         [m, d, h],
         [cm, cd, ch]
     )
-    niepewnoscRozszerzonaEl.textContent = fizlib.niepewnoscRozszerzona(
+    niepewnoscRozszerzonaEl.textContent = functions.niepewnoscRozszerzona(
         [m, d, h],
         [cm, cd, ch],
         2
