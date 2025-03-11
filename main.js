@@ -1,4 +1,4 @@
-import Pomiar from "./fizlib.js";
+import Pomiar from "./pomiar.js";
 import * as functions from "./functions.js";
 
 function addPomiarHtml(id, nazwa) {
