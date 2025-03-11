@@ -54,18 +54,18 @@ function addPomiarHtml(id, nazwa) {
     }
     pomiar.hook(update)
 
-    npObserwatoraEl.addEventListener("input", function() {
+    npObserwatoraEl.addEventListener("input", () => {
         const nowa = parseFloat(this.value)
         if (!Number.isNaN(nowa))
             pomiar.niepewnoscEksperymentatora = nowa
     })
-    npWzorcowaniaEl.addEventListener("input", function() {
+    npWzorcowaniaEl.addEventListener("input", () => {
         const nowa = parseFloat(this.value)
         if (!Number.isNaN(nowa))
             pomiar.niepewnoscWzorcowania = nowa
     })
 
-    const dodajPomiar = function() {
+    const dodajPomiar = () => {
         const nowyPomiar = parseFloat(nowyPomiarInput.value)
         if (!Number.isNaN(nowyPomiar)) {
             pomiar.dodajPomiar(nowyPomiar)
@@ -75,7 +75,7 @@ function addPomiarHtml(id, nazwa) {
     }
 
     document.getElementById(`${id}dodaj`).addEventListener("click", dodajPomiar)
-    nowyPomiarInput.addEventListener("keydown", function (event) {
+    nowyPomiarInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter")
             dodajPomiar()
     })
@@ -117,25 +117,21 @@ m.hook(pomiarZmieniony)
 d.hook(pomiarZmieniony)
 h.hook(pomiarZmieniony)
 
-document.getElementById("skopiujPomiary").onclick = () => {
-    var text = JSON.stringify([m, d, h]);
-    navigator.clipboard.writeText(text).then(function() {
-        console.log("Copying to clipboard was successful!");
-    }, function(err) {
-        console.error("Could not copy text: ", err);
-    });
-}
+document.getElementById("skopiujPomiary").onclick = () => 
+    navigator.clipboard.writeText(JSON.stringify([m, d, h]))
+        .then(() => console.log("Copying to clipboard was successful!"))
+        .catch(err => console.error("Could not copy text: ", err))
 
-document.getElementById("wklejPomiary").onclick = () => {
+document.getElementById("wklejPomiary").onclick = () =>
     navigator.clipboard.readText().then((txt) => {
         const pomiary = JSON.parse(txt)
+
         if (Array.isArray(pomiary) && pomiary.length === 3) {
             m.applyChanges(pomiary[0])
             d.applyChanges(pomiary[1])
             h.applyChanges(pomiary[2])
         }
     })
-}
 
 
 /*
