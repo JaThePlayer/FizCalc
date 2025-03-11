@@ -3,27 +3,6 @@ import * as functions from "./functions.js";
 
 function addPomiarHtml(id, nazwa) {
     const pomiar = new Pomiar();
-
-    const pomiarHtml = document.createElement("li")
-
-    document.getElementById("pomiaryList").appendChild(pomiarHtml)
-
-    pomiarHtml.innerHTML = `
-    <li>${nazwa}</li>
-    <label for="${id}npObs">Niepewność obserwatora:</label>
-    <input type="text" id="${id}npObs" name="${id}npObs"></input><br>
-    <label for="${id}npWz">Niepewność wzorcowania:</label>
-    <input type="text" id="${id}npWz" name="${id}npWz"></input><br>
-    <label for="${id}nowy"> Nowy pomiar: </label>
-    <input type="text" id="${id}nowy" name="${id}nowy"></input>
-    <button id="${id}dodaj">Dodaj</button><br>
-
-    <ol type="I" id="${id}listaPomiarow"></ol>
-
-    Średnia arytmetyczna: <span id="${id}srednia"></span><br>
-    Niepewność pomiarowa: <span id="${id}np"></span><br>
-    `
-
     const listaPomiarow = document.getElementById(`${id}listaPomiarow`)
     const nowyPomiarInput = document.getElementById(`${id}nowy`)
     const sredniaSpan = document.getElementById(`${id}srednia`)
@@ -31,11 +10,30 @@ function addPomiarHtml(id, nazwa) {
     const npObserwatoraEl = document.getElementById(`${id}npObs`)
     const npWzorcowaniaEl = document.getElementById(`${id}npWz`)
 
+    const pomiarHtml = document.createElement("li")
+    pomiarHtml.innerHTML = (`
+        <li>${nazwa}</li>
+        <label for="${id}npObs">Niepewność obserwatora:</label>
+        <input type="text" id="${id}npObs" name="${id}npObs"></input><br>
+        <label for="${id}npWz">Niepewność wzorcowania:</label>
+        <input type="text" id="${id}npWz" name="${id}npWz"></input><br>
+        <label for="${id}nowy"> Nowy pomiar: </label>
+        <input type="text" id="${id}nowy" name="${id}nowy"></input>
+        <button id="${id}dodaj">Dodaj</button><br>
+
+        <ol type="I" id="${id}listaPomiarow"></ol>
+
+        Średnia arytmetyczna: <span id="${id}srednia"></span><br>
+        Niepewność pomiarowa: <span id="${id}np"></span><br>
+    `)
+
+    document.getElementById("pomiaryList").appendChild(pomiarHtml)
+
     function update() {
         sredniaSpan.textContent = pomiar.sredniaArytmetyczna()
         npSpan.textContent = pomiar.niepewnoscPomiarowa()
 
-        listaPomiarow.innerHTML = ``
+        listaPomiarow.innerHTML = ""
         pomiar.wartosci.forEach((nowyPomiar, i) => {
             const delButton = document.createElement("button")
             delButton.textContent = "-"
@@ -133,10 +131,11 @@ document.getElementById("wklejPomiary").onclick = () =>
         }
     })
 
+/** Archived */
 
 /*
 const p1 = fizlib.nowyPomiar();
-p1.dodajPomiar(7.35);
+p1.dodajPomiar(7.35);           // https://ftims.edu.p.lodz.pl/course/view.php?id=24
 p1.dodajPomiar(7.3);
 p1.dodajPomiar(7.35);
 p1.dodajPomiar(7.4);
