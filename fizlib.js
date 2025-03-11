@@ -2,7 +2,7 @@ function pow2(x) {
     return x * x
 }
 
-class Pomiar {
+export class Pomiar {
     #niepewnoscWzorcowania
     #niepewnoscEksperymentatora
 
@@ -106,10 +106,6 @@ class Pomiar {
             this.niepewnoscStandardowaBSquared()
         )
     }
-}
-
-export function nowyPomiar() {
-    return new Pomiar()
 }
 
 export function zlozonaNiepewnoscStandardowa(pomiary, wspolczynnikiWrazliwosci) {

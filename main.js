@@ -1,7 +1,7 @@
 import * as fizlib from './fizlib.js';
 
 function addPomiarHtml(id, nazwa) {
-    const pomiar = fizlib.nowyPomiar();
+    const pomiar = new fizlib.Pomiar();
 
     const pomiarHtml = document.createElement("li")
 
