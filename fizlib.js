@@ -1,7 +1,3 @@
-function pow2(x) {
-    return x * x
-}
-
 export class Pomiar {
     #niepewnoscWzorcowania
     #niepewnoscEksperymentatora
@@ -71,7 +67,7 @@ export class Pomiar {
     niepewnoscStandardowaSquared() {
         const n = this.wartosci.length
         const srednia = this.sredniaArytmetyczna()
-        const licznik = this.wartosci.reduce((a, b) => a + pow2((b - srednia)), 0)
+        const licznik = this.wartosci.reduce((a, b) => a + (b - srednia) ** 2, 0)
         const mianownik = n * (n - 1)
 
         return licznik / mianownik
@@ -84,7 +80,7 @@ export class Pomiar {
     /** Metoda B - niepewność wzorcowania i eksperymentatora **/
     niepewnoscStandardowaBSquared() {
         const wplywNiepewnosci = function (x) {
-            return pow2(x) / 3
+            return x * x / 3
         }
 
         return wplywNiepewnosci(this.niepewnoscWzorcowania) 
@@ -112,7 +108,7 @@ export function zlozonaNiepewnoscStandardowa(pomiary, wspolczynnikiWrazliwosci) 
     let suma = 0
     for (let i = 0; i < pomiary.length; i++) {
         const udzialNiepewnosci = wspolczynnikiWrazliwosci[i] * pomiary[i].niepewnoscPomiarowa()
-        suma += pow2(udzialNiepewnosci)
+        suma += udzialNiepewnosci * udzialNiepewnosci
     }
 
     return Math.sqrt(suma)
