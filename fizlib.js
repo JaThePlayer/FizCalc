@@ -5,16 +5,19 @@ function pow2(x) {
 }
 
 class Pomiar {
+    #niepewnoscWzorcowania
+    #niepewnoscEksperymentatora
+
     constructor() {
         this.wartosci = []
-        this._niepewnoscWzorcowania = 0
-        this._niepewnoscEksperymentatora = 0
+        this.#niepewnoscWzorcowania = 0
+        this.#niepewnoscEksperymentatora = 0
         this.onChanged = () => {}
     }
 
     applyChanges(newValues) {
-        this._niepewnoscEksperymentatora = newValues._niepewnoscEksperymentatora
-        this._niepewnoscWzorcowania = newValues._niepewnoscWzorcowania
+        this.#niepewnoscEksperymentatora = newValues._niepewnoscEksperymentatora
+        this.#niepewnoscWzorcowania = newValues._niepewnoscWzorcowania
         this.wartosci = newValues.wartosci
 
         this.onChanged()
@@ -43,20 +46,20 @@ class Pomiar {
     }
 
     get niepewnoscEksperymentatora() {
-        return this._niepewnoscEksperymentatora
+        return this.#niepewnoscEksperymentatora
     }
 
     set niepewnoscEksperymentatora(x) {
-        this._niepewnoscEksperymentatora = x
+        this.#niepewnoscEksperymentatora = x
         this.onChanged()
     }
 
     get niepewnoscWzorcowania() {
-        return this._niepewnoscWzorcowania
+        return this.#niepewnoscWzorcowania
     }
 
     set niepewnoscWzorcowania(x) {
-        this._niepewnoscWzorcowania = x
+        this.#niepewnoscWzorcowania = x
         this.onChanged()
     }
 
