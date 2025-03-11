@@ -1,5 +1,5 @@
-import * as fizlib from './fizlib.js';
-import * as functions from './functions.js';
+import * as fizlib from "./fizlib.js";
+import * as functions from "./functions.js";
 
 function addPomiarHtml(id, nazwa) {
     const pomiar = new fizlib.Pomiar();
@@ -120,9 +120,9 @@ h.hook(pomiarZmieniony)
 document.getElementById("skopiujPomiary").onclick = () => {
     var text = JSON.stringify([m, d, h]);
     navigator.clipboard.writeText(text).then(function() {
-        console.log('Copying to clipboard was successful!');
+        console.log("Copying to clipboard was successful!");
     }, function(err) {
-        console.error('Could not copy text: ', err);
+        console.error("Could not copy text: ", err);
     });
 }
 
