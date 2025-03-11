@@ -1,5 +1,3 @@
-// fizlib.js
-
 function pow2(x) {
     return x * x
 }
@@ -69,8 +67,8 @@ class Pomiar {
         return this.wartosci.reduce((a, b) => a + b) / this.wartosci.length
     }
 
+    /** Metoda A **/
     niepewnoscStandardowaSquared() {
-        // Metoda A
         const n = this.wartosci.length
         const srednia = this.sredniaArytmetyczna()
         const licznik = this.wartosci.reduce((a, b) => a + pow2((b - srednia)), 0)
@@ -83,8 +81,8 @@ class Pomiar {
         return Math.sqrt(this.niepewnoscStandardowaSquared())
     }
 
+    /** Metoda B - niepewność wzorcowania i eksperymentatora **/
     niepewnoscStandardowaBSquared() {
-        // Metoda B - niepewność wzorcowania i eksperymentatora
         const wplywNiepewnosci = function (x) {
             return pow2(x) / 3
         }
@@ -97,12 +95,12 @@ class Pomiar {
         return Math.sqrt(this.niepewnoscStandardowaBSquared())
     }
 
+    /** Pełna niepewność, wliczająca metody A i B **/
     niepewnoscPomiarowa() {
         if (this.znanaNiepewnoscPomiarowa) {
             return this.znanaNiepewnoscPomiarowa
         }
 
-        // Pełna niepewność, wliczająca metody A i B
         return Math.sqrt(
             this.niepewnoscStandardowaSquared() +
             this.niepewnoscStandardowaBSquared()
