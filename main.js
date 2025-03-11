@@ -1,16 +1,11 @@
 import Pomiar from "./pomiar.js";
 import * as functions from "./functions.js";
 
-function addPomiarHtml(id, nazwa) {
-    const pomiar = new Pomiar();
-    const listaPomiarow = document.getElementById(`${id}listaPomiarow`)
-    const nowyPomiarInput = document.getElementById(`${id}nowy`)
-    const sredniaSpan = document.getElementById(`${id}srednia`)
-    const npSpan = document.getElementById(`${id}np`)
-    const npObserwatoraEl = document.getElementById(`${id}npObs`)
-    const npWzorcowaniaEl = document.getElementById(`${id}npWz`)
+const pomiaryList = document.getElementById("pomiaryList");
 
+function createPomiarLi(id, nazwa) {
     const pomiarHtml = document.createElement("li")
+
     pomiarHtml.innerHTML = (`
         <li>${nazwa}</li>
         <label for="${id}npObs">Niepewność obserwatora:</label>
@@ -27,7 +22,19 @@ function addPomiarHtml(id, nazwa) {
         Niepewność pomiarowa: <span id="${id}np"></span><br>
     `)
 
-    document.getElementById("pomiaryList").appendChild(pomiarHtml)
+    pomiaryList.appendChild(pomiarHtml)
+}
+
+function addPomiarHtml(id, nazwa) {
+    const pomiar = new Pomiar();
+    createPomiarLi(id, nazwa)
+
+    const listaPomiarow = document.getElementById(`${id}listaPomiarow`)
+    const nowyPomiarInput = document.getElementById(`${id}nowy`)
+    const sredniaSpan = document.getElementById(`${id}srednia`)
+    const npSpan = document.getElementById(`${id}np`)
+    const npObserwatoraEl = document.getElementById(`${id}npObs`)
+    const npWzorcowaniaEl = document.getElementById(`${id}npWz`)
 
     function update() {
         sredniaSpan.textContent = pomiar.sredniaArytmetyczna()
