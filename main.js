@@ -90,9 +90,9 @@ function addPomiarHtml(id, nazwa) {
     return pomiar
 }
 
-const gestoscEl = document.getElementById(`gestosc`)
-const zlozonaNiepewnoscStandardowaEl = document.getElementById(`zlozonaNiepewnoscStandardowa`)
-const niepewnoscRozszerzonaEl = document.getElementById(`niepewnoscRozszerzona`)
+const gestoscEl = document.getElementById("gestosc")
+const zlozonaNiepewnoscStandardowaEl = document.getElementById("zlozonaNiepewnoscStandardowa")
+const niepewnoscRozszerzonaEl = document.getElementById("niepewnoscRozszerzona")
 
 const m = addPomiarHtml("m", "m[g] (masa)")
 const d = addPomiarHtml("d", "d[mm] (średnica)")
@@ -103,7 +103,7 @@ function pomiarZmieniony() {
     const pAvg = m.sredniaArytmetyczna() / VAvg
 
     const cm = pAvg / m.sredniaArytmetyczna()
-    const cd = -2*pAvg / d.sredniaArytmetyczna()
+    const cd = -2 * pAvg / d.sredniaArytmetyczna()
     const ch = -pAvg / h.sredniaArytmetyczna()
 
     gestoscEl.textContent = pAvg
