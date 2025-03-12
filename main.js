@@ -97,6 +97,7 @@ const niepewnoscRozszerzonaEl = document.getElementById("niepewnoscRozszerzona")
 const m = addPomiarHtml("m", "m[g] (masa)")
 const d = addPomiarHtml("d", "d[mm] (średnica)")
 const h = addPomiarHtml("h", "h[mm] (wysokość)")
+const mdh_arr = [m, d, h];
 
 function pomiarZmieniony() {
     const VAvg = Math.PI * d.sredniaArytmetyczna() * d.sredniaArytmetyczna() * h.sredniaArytmetyczna() / 4
@@ -106,29 +107,22 @@ function pomiarZmieniony() {
     const cd = -2 * pAvg / d.sredniaArytmetyczna()
     const ch = -pAvg / h.sredniaArytmetyczna()
 
+    const carr2 = [cm, cd, ch];
+
     gestoscEl.textContent = pAvg
-    zlozonaNiepewnoscStandardowaEl.textContent = functions.zlozonaNiepewnoscStandardowa(
-        [m, d, h],
-        [cm, cd, ch]
-    )
-    niepewnoscRozszerzonaEl.textContent = functions.niepewnoscRozszerzona(
-        [m, d, h],
-        [cm, cd, ch],
-        2
-    )
+    zlozonaNiepewnoscStandardowaEl.textContent = functions.zlozonaNiepewnoscStandardowa(mdh_arr, carr2)
+    niepewnoscRozszerzonaEl.textContent = functions.niepewnoscRozszerzona(mdh_arr, carr2, 2)
 }
+mdh_arr.forEach(pomiar => pomiar.hook(pomiarZmieniony))
 
-m.hook(pomiarZmieniony)
-d.hook(pomiarZmieniony)
-h.hook(pomiarZmieniony)
-
-document.getElementById("skopiujPomiary").onclick = () => 
-    navigator.clipboard.writeText(JSON.stringify([m, d, h]))
+document.getElementById("skopiujPomiary").addEventListener("click", () =>
+    navigator.clipboard.writeText(JSON.stringify(mdh_arr))
         .then(() => console.log("Copying to clipboard was successful!"))
         .catch(err => console.error("Could not copy text: ", err))
+)
 
-document.getElementById("wklejPomiary").onclick = () =>
-    navigator.clipboard.readText().then((txt) => {
+document.getElementById("wklejPomiary").addEventListener("click", () =>
+    navigator.clipboard.readText().then(txt => {
         const pomiary = JSON.parse(txt)
 
         if (Array.isArray(pomiary) && pomiary.length === 3) {
@@ -137,6 +131,7 @@ document.getElementById("wklejPomiary").onclick = () =>
             h.applyChanges(pomiary[2])
         }
     })
+)
 
 /** Archived */
 
