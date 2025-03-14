@@ -8,8 +8,8 @@ function createPomiarLi(id, nazwa) {
 
     pomiarHtml.innerHTML = (`
         <li>${nazwa}</li>
-        <label for="${id}npObs">Niepewność obserwatora:</label>
-        <input type="text" id="${id}npObs" name="${id}npObs"></input><br>
+        <label for="${id}npEksperymentatora">Niepewność eksperymentatora:</label>
+        <input type="text" id="${id}npEksperymentatora" name="${id}npEksperymentatora"></input><br>
         <label for="${id}npWz">Niepewność wzorcowania:</label>
         <input type="text" id="${id}npWz" name="${id}npWz"></input><br>
         <label for="${id}nowy"> Nowy pomiar: </label>
@@ -33,7 +33,7 @@ function addPomiarHtml(id, nazwa) {
     const nowyPomiarInput = document.getElementById(`${id}nowy`)
     const sredniaSpan = document.getElementById(`${id}srednia`)
     const npSpan = document.getElementById(`${id}np`)
-    const npObserwatoraEl = document.getElementById(`${id}npObs`)
+    const npEksperymentatoraEl = document.getElementById(`${id}npEksperymentatora`)
     const npWzorcowaniaEl = document.getElementById(`${id}npWz`)
 
     function update() {
@@ -54,17 +54,27 @@ function addPomiarHtml(id, nazwa) {
             listaPomiarow.appendChild(listItem)
         });
 
-        npObserwatoraEl.value = pomiar.niepewnoscEksperymentatora
-        npWzorcowaniaEl.value = pomiar.niepewnoscWzorcowania
+        // Update the text input element's value to newValue, 
+        // if the numerical value of that text input isn't equal to the newValue.
+        // The check is needed to allow the user to type '.' without it being reset.
+        function updateInputTextIfNeeded(inputEl, newValue) {
+            if (parseFloat(inputEl.value) !== newValue)
+                inputEl.value = newValue
+        }
+
+        updateInputTextIfNeeded(npEksperymentatoraEl, pomiar.niepewnoscEksperymentatora)
+        updateInputTextIfNeeded(npWzorcowaniaEl, pomiar.niepewnoscWzorcowania)
     }
     pomiar.hook(update)
 
-    npObserwatoraEl.addEventListener("input", () => {
+    // We have to use `function()` instead of `() =>` here, so that `this` is set to the HTMLElement instance
+    // - arrow functions do not have their own `this` value
+    npEksperymentatoraEl.addEventListener("input", function() {
         const nowa = parseFloat(this.value)
         if (!Number.isNaN(nowa))
             pomiar.niepewnoscEksperymentatora = nowa
     })
-    npWzorcowaniaEl.addEventListener("input", () => {
+    npWzorcowaniaEl.addEventListener("input", function() {
         const nowa = parseFloat(this.value)
         if (!Number.isNaN(nowa))
             pomiar.niepewnoscWzorcowania = nowa
