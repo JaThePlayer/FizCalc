@@ -71,11 +71,16 @@ export class Pomiar {
         return this.wartosci.reduce((a, b) => a + b) / this.wartosci.length
     }
 
+    sumaOdchylenOdSredniej() {
+        const srednia = this.sredniaArytmetyczna()
+        
+        return this.wartosci.reduce((a, b) => a + (b - srednia) ** 2, 0)
+    }
+
     /** Metoda A **/
     niepewnoscStandardowaSquared() {
         const n = this.wartosci.length
-        const srednia = this.sredniaArytmetyczna()
-        const licznik = this.wartosci.reduce((a, b) => a + (b - srednia) ** 2, 0)
+        const licznik = this.sumaOdchylenOdSredniej()
         const mianownik = n * (n - 1)
 
         return licznik / mianownik

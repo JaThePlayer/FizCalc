@@ -19,8 +19,10 @@ function createPomiarLi(id, nazwa) {
         <ol type="I" id="${id}listaPomiarow"></ol>
 
         Średnia arytmetyczna: <span id="${id}srednia"></span><br>
+        Suma odchyleń od średniej = sum(xi - xAvg)^2: <span id="${id}sumaOdchylenOdSredniej"></span><br>
+        Niepewność standardowa A: <span id="${id}npA"></span><br>
+        Niepewność standardowa B: <span id="${id}npB"></span><br>
         Niepewność pomiarowa: <span id="${id}np"></span><br>
-        (Niepewność standardowa A)^2 = sum(xi - xAvg)^2: <span id="${id}npASq"></span><br>
     `)
 
     pomiaryList.appendChild(pomiarHtml)
@@ -34,14 +36,18 @@ function addPomiarHtml(id, nazwa) {
     const nowyPomiarInput = document.getElementById(`${id}nowy`)
     const sredniaSpan = document.getElementById(`${id}srednia`)
     const npSpan = document.getElementById(`${id}np`)
-    const npASqSpan = document.getElementById(`${id}npASq`)
+    const npASpan = document.getElementById(`${id}npA`)
+    const npBSpan = document.getElementById(`${id}npB`)
+    const sumaOdchylenOdSredniejSpan = document.getElementById(`${id}sumaOdchylenOdSredniej`)
     const npEksperymentatoraEl = document.getElementById(`${id}npEksperymentatora`)
     const npWzorcowaniaEl = document.getElementById(`${id}npWz`)
 
     function update() {
         sredniaSpan.textContent = pomiar.sredniaArytmetyczna()
         npSpan.textContent = pomiar.niepewnoscPomiarowa()
-        npASqSpan.textContent = pomiar.niepewnoscStandardowaSquared()
+        npASpan.textContent = pomiar.niepewnoscStandardowa()
+        npBSpan.textContent = pomiar.niepewnoscStandardowaB()
+        sumaOdchylenOdSredniejSpan.textContent = pomiar.sumaOdchylenOdSredniej()
 
         listaPomiarow.innerHTML = ""
         pomiar.wartosci.forEach((nowyPomiar, i) => {
