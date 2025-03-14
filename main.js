@@ -1,27 +1,33 @@
-import * as fizlib from './fizlib.js';
+import Pomiar from "./pomiar.js";
+import * as functions from "./functions.js";
 
-function addPomiarHtml(id, nazwa) {
-    const pomiar = fizlib.nowyPomiar();
+const pomiaryList = document.getElementById("pomiaryList");
 
+function createPomiarLi(id, nazwa) {
     const pomiarHtml = document.createElement("li")
 
-    document.getElementById("pomiaryList").appendChild(pomiarHtml)
+    pomiarHtml.innerHTML = (`
+        <li>${nazwa}</li>
+        <label for="${id}npObs">Niepewność obserwatora:</label>
+        <input type="text" id="${id}npObs" name="${id}npObs"></input><br>
+        <label for="${id}npWz">Niepewność wzorcowania:</label>
+        <input type="text" id="${id}npWz" name="${id}npWz"></input><br>
+        <label for="${id}nowy"> Nowy pomiar: </label>
+        <input type="text" id="${id}nowy" name="${id}nowy"></input>
+        <button id="${id}dodaj">Dodaj</button><br>
 
-    pomiarHtml.innerHTML = `
-    <li>${nazwa}</li>
-    <label for="${id}npObs">Niepewność obserwatora:</label>
-    <input type="text" id="${id}npObs" name="${id}npObs"></input><br>
-    <label for="${id}npWz">Niepewność wzorcowania:</label>
-    <input type="text" id="${id}npWz" name="${id}npWz"></input><br>
-    <label for="${id}nowy"> Nowy pomiar: </label>
-    <input type="text" id="${id}nowy" name="${id}nowy"></input>
-    <button id="${id}dodaj">Dodaj</button><br>
+        <ol type="I" id="${id}listaPomiarow"></ol>
 
-    <ol type="I" id="${id}listaPomiarow"></ol>
+        Średnia arytmetyczna: <span id="${id}srednia"></span><br>
+        Niepewność pomiarowa: <span id="${id}np"></span><br>
+    `)
 
-    Średnia arytmetyczna: <span id="${id}srednia"></span><br>
-    Niepewność pomiarowa: <span id="${id}np"></span><br>
-    `
+    pomiaryList.appendChild(pomiarHtml)
+}
+
+function addPomiarHtml(id, nazwa) {
+    const pomiar = new Pomiar();
+    createPomiarLi(id, nazwa)
 
     const listaPomiarow = document.getElementById(`${id}listaPomiarow`)
     const nowyPomiarInput = document.getElementById(`${id}nowy`)
@@ -34,7 +40,7 @@ function addPomiarHtml(id, nazwa) {
         sredniaSpan.textContent = pomiar.sredniaArytmetyczna()
         npSpan.textContent = pomiar.niepewnoscPomiarowa()
 
-        listaPomiarow.innerHTML = ``
+        listaPomiarow.innerHTML = ""
         pomiar.wartosci.forEach((nowyPomiar, i) => {
             const delButton = document.createElement("button")
             delButton.textContent = "-"
@@ -53,18 +59,18 @@ function addPomiarHtml(id, nazwa) {
     }
     pomiar.hook(update)
 
-    npObserwatoraEl.addEventListener("input", function() {
+    npObserwatoraEl.addEventListener("input", () => {
         const nowa = parseFloat(this.value)
         if (!Number.isNaN(nowa))
             pomiar.niepewnoscEksperymentatora = nowa
     })
-    npWzorcowaniaEl.addEventListener("input", function() {
+    npWzorcowaniaEl.addEventListener("input", () => {
         const nowa = parseFloat(this.value)
         if (!Number.isNaN(nowa))
             pomiar.niepewnoscWzorcowania = nowa
     })
 
-    const dodajPomiar = function() {
+    const dodajPomiar = () => {
         const nowyPomiar = parseFloat(nowyPomiarInput.value)
         if (!Number.isNaN(nowyPomiar)) {
             pomiar.dodajPomiar(nowyPomiar)
@@ -74,7 +80,7 @@ function addPomiarHtml(id, nazwa) {
     }
 
     document.getElementById(`${id}dodaj`).addEventListener("click", dodajPomiar)
-    nowyPomiarInput.addEventListener("keydown", function (event) {
+    nowyPomiarInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter")
             dodajPomiar()
     })
@@ -84,62 +90,54 @@ function addPomiarHtml(id, nazwa) {
     return pomiar
 }
 
-const gestoscEl = document.getElementById(`gestosc`)
-const zlozonaNiepewnoscStandardowaEl = document.getElementById(`zlozonaNiepewnoscStandardowa`)
-const niepewnoscRozszerzonaEl = document.getElementById(`niepewnoscRozszerzona`)
+const gestoscEl = document.getElementById("gestosc")
+const zlozonaNiepewnoscStandardowaEl = document.getElementById("zlozonaNiepewnoscStandardowa")
+const niepewnoscRozszerzonaEl = document.getElementById("niepewnoscRozszerzona")
 
 const m = addPomiarHtml("m", "m[g] (masa)")
 const d = addPomiarHtml("d", "d[mm] (średnica)")
 const h = addPomiarHtml("h", "h[mm] (wysokość)")
+const mdh_arr = [m, d, h];
 
 function pomiarZmieniony() {
     const VAvg = Math.PI * d.sredniaArytmetyczna() * d.sredniaArytmetyczna() * h.sredniaArytmetyczna() / 4
     const pAvg = m.sredniaArytmetyczna() / VAvg
 
     const cm = pAvg / m.sredniaArytmetyczna()
-    const cd = -2*pAvg / d.sredniaArytmetyczna()
+    const cd = -2 * pAvg / d.sredniaArytmetyczna()
     const ch = -pAvg / h.sredniaArytmetyczna()
 
+    const carr2 = [cm, cd, ch];
+
     gestoscEl.textContent = pAvg
-    zlozonaNiepewnoscStandardowaEl.textContent = fizlib.zlozonaNiepewnoscStandardowa(
-        [m, d, h],
-        [cm, cd, ch]
-    )
-    niepewnoscRozszerzonaEl.textContent = fizlib.niepewnoscRozszerzona(
-        [m, d, h],
-        [cm, cd, ch],
-        2
-    )
+    zlozonaNiepewnoscStandardowaEl.textContent = functions.zlozonaNiepewnoscStandardowa(mdh_arr, carr2)
+    niepewnoscRozszerzonaEl.textContent = functions.niepewnoscRozszerzona(mdh_arr, carr2, 2)
 }
+mdh_arr.forEach(pomiar => pomiar.hook(pomiarZmieniony))
 
-m.hook(pomiarZmieniony)
-d.hook(pomiarZmieniony)
-h.hook(pomiarZmieniony)
+document.getElementById("skopiujPomiary").addEventListener("click", () =>
+    navigator.clipboard.writeText(JSON.stringify(mdh_arr))
+        .then(() => console.log("Copying to clipboard was successful!"))
+        .catch(err => console.error("Could not copy text: ", err))
+)
 
-document.getElementById("skopiujPomiary").onclick = () => {
-    var text = JSON.stringify([m, d, h]);
-    navigator.clipboard.writeText(text).then(function() {
-        console.log('Copying to clipboard was successful!');
-    }, function(err) {
-        console.error('Could not copy text: ', err);
-    });
-}
-
-document.getElementById("wklejPomiary").onclick = () => {
-    navigator.clipboard.readText().then((txt) => {
+document.getElementById("wklejPomiary").addEventListener("click", () =>
+    navigator.clipboard.readText().then(txt => {
         const pomiary = JSON.parse(txt)
+
         if (Array.isArray(pomiary) && pomiary.length === 3) {
             m.applyChanges(pomiary[0])
             d.applyChanges(pomiary[1])
             h.applyChanges(pomiary[2])
         }
     })
-}
+)
 
+/** Archived */
 
 /*
 const p1 = fizlib.nowyPomiar();
-p1.dodajPomiar(7.35);
+p1.dodajPomiar(7.35);           // https://ftims.edu.p.lodz.pl/course/view.php?id=24
 p1.dodajPomiar(7.3);
 p1.dodajPomiar(7.35);
 p1.dodajPomiar(7.4);
