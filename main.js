@@ -126,7 +126,7 @@ function pomiarZmieniony() {
 mdh_arr.forEach(pomiar => pomiar.hook(pomiarZmieniony))
 
 document.getElementById("skopiujPomiary").addEventListener("click", () =>
-    navigator.clipboard.writeText(JSON.stringify(mdh_arr))
+    navigator.clipboard.writeText(JSON.stringify(mdh_arr.map(x => x.serialize())))
         .then(() => console.log("Copying to clipboard was successful!"))
         .catch(err => console.error("Could not copy text: ", err))
 )

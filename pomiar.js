@@ -10,11 +10,19 @@ export class Pomiar {
     }
 
     applyChanges(newValues) {
-        this.#niepewnoscEksperymentatora = newValues._niepewnoscEksperymentatora
-        this.#niepewnoscWzorcowania = newValues._niepewnoscWzorcowania
+        this.#niepewnoscEksperymentatora = newValues.niepewnoscEksperymentatora
+        this.#niepewnoscWzorcowania = newValues.niepewnoscWzorcowania
         this.wartosci = newValues.wartosci
 
         this.onChanged()
+    }
+
+    serialize() {
+        return {
+            niepewnoscEksperymentatora: this.niepewnoscEksperymentatora,
+            niepewnoscWzorcowania: this.niepewnoscWzorcowania,
+            wartosci: this.wartosci,
+        }
     }
 
     hook(onChanged) {
